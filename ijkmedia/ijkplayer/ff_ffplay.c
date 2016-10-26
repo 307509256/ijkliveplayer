@@ -2457,7 +2457,10 @@ static int read_thread(void *arg)
 
     opts = setup_find_stream_info_opts(ic, ffp->codec_opts);
     orig_nb_streams = ic->nb_streams;
-
+	if(strstr(ic->filename, "rtsp")){
+		av_log(NULL, AV_LOG_ERROR, "[gongjia %s, %d]. rtsp\n",__FUNCTION__, __LINE__);
+		ic->probesize = 128*1024;
+	}
     err = avformat_find_stream_info(ic, opts);
 
     for (i = 0; i < orig_nb_streams; i++)
@@ -2644,8 +2647,9 @@ static int read_thread(void *arg)
                  (ic->pb && !strncmp(ffp->input_filename, "mmsh:", 5)))) {
             /* wait 10 ms to avoid trying to get another packet */
             /* XXX: horrible */
-            SDL_Delay(10);
-            continue;
+			//gongjia mask
+            //SDL_Delay(10);
+            //continue;
         }
 #endif
         if (is->seek_req) {
@@ -3809,8 +3813,8 @@ void ffp_check_buffering_l(FFPlayer *ffp)
         buf_percent = buf_size_percent;
     }
 
-    if (buf_time_percent >= 0 && buf_size_percent >= 0) {
-        buf_percent = FFMIN(buf_time_percent, buf_size_percent);
+    if (buf_time_percent >= 0 || buf_size_percent >= 0) {
+        buf_percent = FFMAX(buf_time_percent, buf_size_percent);
     }
     if (buf_percent) {
 #ifdef FFP_SHOW_BUF_POS
