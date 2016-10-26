@@ -8,13 +8,26 @@
     android:paddingRight="@dimen/ijk_horizontal_margin"
     android:paddingTop="0dp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <EditText
         android:id="@+id/path_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:editable="false"
-        android:visibility="gone"
+        android:layout_toLeftOf="@+id/bt_play"
         android:lines="1" />
+
+        <Button
+            android:id="@+id/bt_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="play" />
+    </RelativeLayout>
+
 
     <ListView
         android:id="@+id/file_list_view"

@@ -21,13 +21,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import tv.danmaku.ijk.media.sample.R;
 import tv.danmaku.ijk.media.sample.activities.VideoActivity;
@@ -35,6 +39,8 @@ import tv.danmaku.ijk.media.sample.activities.VideoActivity;
 public class SampleMediaListFragment extends Fragment {
     private ListView mFileListView;
     private SampleMediaAdapter mAdapter;
+    private EditText path_view;
+    private Button bt_play;
 
     public static SampleMediaListFragment newInstance() {
         SampleMediaListFragment f = new SampleMediaListFragment();
@@ -46,6 +52,15 @@ public class SampleMediaListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_file_list, container, false);
         mFileListView = (ListView) viewGroup.findViewById(R.id.file_list_view);
+        path_view = (EditText) viewGroup.findViewById(R.id.path_view);
+        bt_play = (Button) viewGroup.findViewById(R.id.bt_play);
+        bt_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playurl();
+            }
+        });
+        //end
         return viewGroup;
     }
 
@@ -69,10 +84,10 @@ public class SampleMediaListFragment extends Fragment {
         mAdapter.addItem("http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/gear5/prog_index.m3u8", "hls 1080P");
         mAdapter.addItem("http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8", "hls 720P");
         mAdapter.addItem("rtmp://rtmpplay3.idol001.com/live/korea_sbs", "rtmp korea_sbs");
-        mAdapter.addItem("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.sdp", "rtsp 海关");
+        mAdapter.addItem("rtsp://218.204.223.237:554/live/1/67A7572844E51A64/f68g2mj7wjua3la7.sdp", "rtsp Custom");
         mAdapter.addItem("rtsp://119.164.59.39:1554/iptv/Tvod/iptv/001/001/ch15050914035980594154.rsc/27191_Uni.sdp", "rtsp IPTV-CCTV");
-        mAdapter.addItem("rtsp://admin:qx12345678@221.182.63.227:23554/Streaming/Channels/101?transportmode=unicast", "rtsp-1080p 渠南新村");
-        mAdapter.addItem("rtsp://117.139.57.40:556/HongTranSvr?DevId=4085e760-cf31-489a-b883-b8c330ebc30c&Session=4085e760-cf31-489a-b883-b8c330ebc30c&Url=\"rtsp://admin:a12345678@10.2.0.52:554/cam/realmonitor?channel=1&subtype=1\"", "rtsp-1080p   双桥水库");
+        mAdapter.addItem("rtsp://admin:qx12345678@221.182.63.227:23554/Streaming/Channels/101?transportmode=unicast", "rtsp-1080p village");
+        mAdapter.addItem("rtsp://117.139.57.40:556/HongTranSvr?DevId=4085e760-cf31-489a-b883-b8c330ebc30c&Session=4085e760-cf31-489a-b883-b8c330ebc30c&Url=\"rtsp://admin:a12345678@10.2.0.52:554/cam/realmonitor?channel=1&subtype=1\"", "rtsp-1080p  Bridge");
         mAdapter.addItem("rtsp://admin:abc12345@192.168.5.12:554/cam/realmonitor?channel=1&subtype=1", "rtsp-1080p other");
 
         mAdapter.addItem("http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8", "bipbop basic master playlist");
@@ -140,5 +155,16 @@ public class SampleMediaListFragment extends Fragment {
             public TextView mNameTextView;
             public TextView mUrlTextView;
         }
+    }
+    //gongjia add
+    public void playurl() {
+        String texturl = path_view.getText().toString();
+        if (TextUtils.isEmpty(texturl)) {
+            Toast.makeText(getActivity().getApplicationContext(), "input url", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String name = "video";
+        String url = texturl;
+        VideoActivity.intentTo(getActivity(), url, name);
     }
 }
